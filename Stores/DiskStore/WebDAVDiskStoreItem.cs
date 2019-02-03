@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Security.Principal;
 using System.Threading;
-using Common.Logging;
+using NLog;
 using WebDAVSharp.Server.Stores.BaseClasses;
 
 namespace WebDAVSharp.Server.Stores.DiskStore
@@ -20,7 +20,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
         /// <summary>
         /// Log
         /// </summary>
-        protected ILog Log;
+        protected Logger Log;
         private readonly WebDavDiskStoreCollection _parentCollection;
         private readonly string _path;
 
@@ -43,7 +43,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
 
             _parentCollection = parentCollection;
             _path = path;
-            Log = LogManager.GetLogger<WebDavDiskStoreItem>();
+            Log = LogManager.GetCurrentClassLogger();
         }
 
         /// <summary>

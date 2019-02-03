@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
-using Common.Logging;
+using NLog;
 using WebDAVSharp.Server.Adapters;
 using WebDAVSharp.Server.Exceptions;
 using WebDAVSharp.Server.MethodHandlers;
@@ -28,7 +28,7 @@ namespace WebDAVSharp.Server
         private readonly bool _ownsListener;
         private readonly IWebDavStore _store;
         private readonly Dictionary<string, IWebDavMethodHandler> _methodHandlers;
-        private readonly ILog _log;
+        private readonly Logger _log;
         private readonly object _threadLock = new object();
 
         private ManualResetEvent _stopEvent;
@@ -88,7 +88,7 @@ namespace WebDAVSharp.Server
                     methodHandler
                 };
             _methodHandlers = handlersWithNames.ToDictionary(v => v.name, v => v.methodHandler);
-            _log = LogManager.GetLogger<WebDavServer>();
+            _log = LogManager.GetCurrentClassLogger();
             }
 
         /// <summary>
@@ -254,8 +254,7 @@ namespace WebDAVSharp.Server
                 throw new WebDavForbiddenException();
             }
 
-            _log.Info(context.Request.HttpMethod + " " + context.Request.RemoteEndPoint + ": " + context.Request.Url);
-            _log.Trace($"Credentials OK: {identity.Name} {identity.Password}");
+            _log.Info(context.Request.HttpMethod + " " + context.Request.RemoteEndPoint + ": " + context.Request.Url + $" (user {identity.Name})");
             try
             {
                 try

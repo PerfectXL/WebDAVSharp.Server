@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Xml;
-using Common.Logging;
+using NLog;
 using WebDAVSharp.Server.Adapters;
 using WebDAVSharp.Server.Stores;
 using WebDAVSharp.Server.Utilities;
@@ -44,7 +44,7 @@ namespace WebDAVSharp.Server.MethodHandlers
         /// <param name="store">The <see cref="IWebDavStore" /> that the <see cref="WebDavServer" /> is hosting.</param>
         public void ProcessRequest(WebDavServer server, IHttpListenerContext context, IWebDavStore store)
         {
-            ILog log = LogManager.GetLogger<WebDavProppatchMethodHandler>();
+            Logger log = LogManager.GetCurrentClassLogger();
 
             /***************************************************************************************************
              * Retreive al the information from the request

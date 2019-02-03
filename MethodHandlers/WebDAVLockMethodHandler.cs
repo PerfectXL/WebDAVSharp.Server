@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Xml;
-using Common.Logging;
+using NLog;
 using WebDAVSharp.Server.Adapters;
 using WebDAVSharp.Server.Exceptions;
 using WebDAVSharp.Server.Stores;
@@ -46,7 +46,7 @@ namespace WebDAVSharp.Server.MethodHandlers
         /// <exception cref="WebDAVSharp.Server.Exceptions.WebDavPreconditionFailedException"></exception>
         public void ProcessRequest(WebDavServer server, IHttpListenerContext context, IWebDavStore store)
         {
-            ILog log = LogManager.GetLogger<WebDavLockMethodHandler>();
+            Logger log = LogManager.GetCurrentClassLogger();
 
             /***************************************************************************************************
              * Retreive al the information from the request
