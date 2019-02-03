@@ -45,23 +45,19 @@ namespace WebDAVSharp.Server.Stores.DiskStore
                 List<string> directories = new List<string>();
                 try
                 {
-                    // Impersonate the current user and get all the directories
-                    using (Identity.Impersonate())
+                    foreach (string dirName in Directory.GetDirectories(ItemPath))
                     {
-                        foreach (string dirName in Directory.GetDirectories(ItemPath))
+                        try
                         {
-                            try
+                            bool canread = CanReadDirectory(Path.Combine(ItemPath, dirName));
+                            if (canread)
                             {
-                                bool canread = CanReadDirectory(Path.Combine(ItemPath, dirName));
-                                if (canread)
-                                {
-                                    directories.Add(dirName);
-                                }
+                                directories.Add(dirName);
                             }
-                            catch (Exception)
-                            {
-                                // do nothing
-                            }
+                        }
+                        catch (Exception)
+                        {
+                            // do nothing
                         }
                     }
                 }
@@ -93,11 +89,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
                 List<string> files = new List<string>();
                 try
                 {
-                    // Impersonate the current user and get all the files
-                    using (Identity.Impersonate())
-                    {
-                        files.AddRange(Directory.GetFiles(ItemPath).Where(fileName => CanReadFile(Path.Combine(ItemPath, fileName))));
-                    }
+                    files.AddRange(Directory.GetFiles(ItemPath).Where(fileName => CanReadFile(Path.Combine(ItemPath, fileName))));
                 }
                 catch
                 {
@@ -213,13 +205,10 @@ namespace WebDAVSharp.Server.Stores.DiskStore
         {
             string path = Path.Combine(ItemPath, name);
 
-            using (Identity.Impersonate())
-            {
-                if (File.Exists(path) && CanReadFile(path))
-                    return new WebDavDiskStoreDocument(this, path);
-                if (Directory.Exists(path) && CanReadDirectory(path))
-                    return new WebDavDiskStoreCollection(this, path);
-            }
+            if (File.Exists(path) && CanReadFile(path))
+                return new WebDavDiskStoreDocument(this, path);
+            if (Directory.Exists(path) && CanReadDirectory(path))
+                return new WebDavDiskStoreCollection(this, path);
 
             return null;
         }
@@ -238,10 +227,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
 
             try
             {
-                // Impersonate the current user and make file changes
-                WindowsImpersonationContext wic = Identity.Impersonate();
                 Directory.CreateDirectory(path);
-                wic.Undo();
             }
             catch
             {
@@ -267,11 +253,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
                     throw new WebDavNotFoundException();
                 try
                 {
-                    // Impersonate the current user and delete the file
-                    WindowsImpersonationContext wic = Identity.Impersonate();
                     File.Delete(itemPath);
-                    wic.Undo();
-
                 }
                 catch
                 {
@@ -284,10 +266,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
                     throw new WebDavNotFoundException();
                 try
                 {
-                    // Impersonate the current user and delete the directory
-                    WindowsImpersonationContext wic = Identity.Impersonate();
                     Directory.Delete(diskItem.ItemPath);
-                    wic.Undo();
                 }
                 catch
                 {
@@ -313,10 +292,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
 
             try
             {
-                // Impersonate the current user and delete the directory
-                WindowsImpersonationContext wic = Identity.Impersonate();
                 File.Create(itemPath).Dispose();
-                wic.Undo();
             }
             catch
             {
@@ -349,10 +325,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
             {
                 try
                 {
-                    // Impersonate the current user and move the directory
-                    WindowsImpersonationContext wic = Identity.Impersonate();
                     DirectoryCopy(source.ItemPath, destinationItemPath, true);
-                    wic.Undo();
                 }
                 catch
                 {
@@ -369,10 +342,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
                 // We copy the file with an override.
                 try
                 {
-                    // Impersonate the current user and copy the file
-                    WindowsImpersonationContext wic = Identity.Impersonate();
                     File.Copy(source.ItemPath, destinationItemPath, true);
-                    wic.Undo();
                 }
                 catch
                 {
@@ -460,10 +430,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
             {
                 try
                 {
-                    // Impersonate the current user and move the directory
-                    WindowsImpersonationContext wic = Identity.Impersonate();
                     Directory.Move(sourceItemPath, destinationItemPath);
-                    wic.Undo();
                 }
                 catch
                 {
@@ -478,10 +445,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
             
                 try
                 {            
-                    // Impersonate the current user and move the file
-                    WindowsImpersonationContext wic = Identity.Impersonate();
                     File.Move(sourceItemPath, destinationItemPath);
-                    wic.Undo();
                 }
                 catch
                     {

@@ -18,11 +18,6 @@ namespace WebDAVSharp.Server.Stores.DiskStore
     public class WebDavDiskStoreItem : WebDavStoreItemBase
     {
         /// <summary>
-        /// Gets the Identity of the person logged on via HTTP Request.
-        /// </summary>
-        protected readonly WindowsIdentity Identity;
-
-        /// <summary>
         /// Log
         /// </summary>
         protected ILog Log;
@@ -48,8 +43,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
 
             _parentCollection = parentCollection;
             _path = path;
-            Identity = (WindowsIdentity)Thread.GetData(Thread.GetNamedDataSlot(WebDavServer.HttpUser));
-            Log = LogManager.GetCurrentClassLogger();
+            Log = LogManager.GetLogger<WebDavDiskStoreItem>();
         }
 
         /// <summary>

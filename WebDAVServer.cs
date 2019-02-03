@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using Common.Logging;
@@ -87,8 +88,13 @@ namespace WebDAVSharp.Server
                     methodHandler
                 };
             _methodHandlers = handlersWithNames.ToDictionary(v => v.name, v => v.methodHandler);
-            _log = LogManager.GetCurrentClassLogger();
+            _log = LogManager.GetLogger<WebDavServer>();
             }
+
+        /// <summary>
+        ///     Function that will be called to verify username and password.
+        /// </summary>
+        public Func<string, string, bool> VerifyUserNameAndPasswordFunc { get; set; }
 
         /// <summary>
         /// Gets the 
@@ -242,9 +248,14 @@ namespace WebDAVSharp.Server
             IHttpListenerContext context = (IHttpListenerContext)state;
 
             // For authentication
-            Thread.SetData(Thread.GetNamedDataSlot(HttpUser), context.AdaptedInstance.User.Identity);
+            var identity = (HttpListenerBasicIdentity)context.AdaptedInstance.User.Identity;
+            if (VerifyUserNameAndPasswordFunc(identity.Name, identity.Password) == false)
+            {
+                throw new WebDavForbiddenException();
+            }
 
             _log.Info(context.Request.HttpMethod + " " + context.Request.RemoteEndPoint + ": " + context.Request.Url);
+            _log.Trace($"Credentials OK: {identity.Name} {identity.Password}");
             try
             {
                 try

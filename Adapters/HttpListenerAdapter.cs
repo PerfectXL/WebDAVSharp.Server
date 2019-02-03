@@ -20,8 +20,8 @@ namespace WebDAVSharp.Server.Adapters
         {
             _listener = new HttpListener
             {
-                AuthenticationSchemes = AuthenticationSchemes.Negotiate,
-                UnsafeConnectionNtlmAuthentication = false
+                AuthenticationSchemes = AuthenticationSchemes.Basic,
+                UnsafeConnectionNtlmAuthentication = false,
             };
         }
 

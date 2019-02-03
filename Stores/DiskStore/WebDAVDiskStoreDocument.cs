@@ -84,10 +84,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
             Stream stream = null;
             try
             {
-                // Impersonate the current user and create the file stream for opening the file
-                WindowsImpersonationContext wic = Identity.Impersonate();
                 stream = new FileStream(ItemPath, FileMode.Open, FileAccess.Read, FileShare.None);
-                wic.Undo();
             }
             catch
             {
@@ -118,10 +115,7 @@ namespace WebDAVSharp.Server.Stores.DiskStore
             Stream stream = null;
             try
             {
-                // Impersonate the current user and create the file stream for writing the file
-                WindowsImpersonationContext wic = Identity.Impersonate();
                 stream = new FileStream(ItemPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
-                wic.Undo();
             }
             catch
             {

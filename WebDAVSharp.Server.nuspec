@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>WebDAVSharp.Server</id>
-        <version>1.0.7</version>
-        <title>WebDAV# Server</title>
-        <authors>Ewout Merckx,Lieven Janssen</authors>
+        <id>WebDAVSharp.Server.BasicAuth</id>
+        <version>1.0.8</version>
+        <title>WebDAV# Server with HTTPS and Basic Authentication</title>
+        <authors>Ewout Merckx,Lieven Janssen, modified by Roel van der Steen</authors>
         <owners>Xplore+</owners>
         <projectUrl>http://webdavsharp.github.io/</projectUrl>
         <iconUrl>https://raw.githubusercontent.com/WebDAVSharp/WebDAVSharp.Server/master/Icon.png</iconUrl>
@@ -24,9 +24,4 @@ This version of WebDAV# has been developed by Lieven Janssen and Ewout Merckx.</
             <frameworkAssembly assemblyName="System.Xml" targetFramework="" />
         </frameworkAssemblies>
     </metadata>
-    <files>
-        <file src="lib\Common.Logging.dll" target="lib\Common.Logging.dll" />
-        <file src="lib\Common.Logging.Core.dll" target="lib\Common.Logging.Core.dll" />
-        <file src="lib\WebDAVSharp.Server.dll" target="lib\WebDAVSharp.Server.dll" />
-    </files>
 </package>

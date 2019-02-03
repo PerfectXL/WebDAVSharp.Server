@@ -50,7 +50,7 @@ namespace WebDAVSharp.Server.MethodHandlers
         /// <exception cref="WebDAVSharp.Server.Exceptions.WebDavUnauthorizedException"></exception>
         public void ProcessRequest(WebDavServer server, IHttpListenerContext context, IWebDavStore store)
         {
-            _log = LogManager.GetCurrentClassLogger();
+            _log = LogManager.GetLogger<WebDavPropfindMethodHandler>();
 
             /***************************************************************************************************
              * Retreive all the information from the request
@@ -151,7 +151,7 @@ namespace WebDAVSharp.Server.MethodHandlers
         /// <exception cref="WebDAVSharp.Server.Exceptions.WebDavConflictException"></exception>
         private static List<IWebDavStoreItem> GetWebDavStoreItems(IWebDavStoreItem iWebDavStoreItem, int depth)
         {
-            ILog _log = LogManager.GetCurrentClassLogger();
+            ILog _log = LogManager.GetLogger<WebDavPropfindMethodHandler>();
             List<IWebDavStoreItem> list = new List<IWebDavStoreItem>();
 
             //IWebDavStoreCollection
