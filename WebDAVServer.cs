@@ -247,16 +247,15 @@ namespace WebDAVSharp.Server
 
             IHttpListenerContext context = (IHttpListenerContext)state;
 
-            // For authentication
-            var identity = (HttpListenerBasicIdentity)context.AdaptedInstance.User.Identity;
-            if (VerifyUserNameAndPasswordFunc(identity.Name, identity.Password) == false)
-            {
-                throw new WebDavForbiddenException();
-            }
-
-            _log.Info(context.Request.HttpMethod + " " + context.Request.RemoteEndPoint + ": " + context.Request.Url + $" (user {identity.Name})");
+            _log.Info(context.Request.HttpMethod + " " + context.Request.RemoteEndPoint + ": " + context.Request.Url);
             try
             {
+                var identity = (HttpListenerBasicIdentity)context.AdaptedInstance.User.Identity;
+                if (VerifyUserNameAndPasswordFunc(identity.Name, identity.Password) == false)
+                {
+                    throw new WebDavForbiddenException();
+                }
+
                 try
                 {
                     string method = context.Request.HttpMethod;
